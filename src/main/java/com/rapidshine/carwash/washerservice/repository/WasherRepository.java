@@ -11,4 +11,7 @@ public interface WasherRepository extends JpaRepository<Washer,Long> {
     @Query("SELECT c FROM Washer c WHERE c.user.id = :userId")
     Optional<Washer> findByUserId(@Param("userId") Long userId);
 
+    @Query("SELECT  w from Washer w where w.email = :email")
+    Optional<Washer> findByEmail(@Param("email") String email);
+
 }

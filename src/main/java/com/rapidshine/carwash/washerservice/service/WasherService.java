@@ -21,14 +21,8 @@ public class WasherService {
     @Autowired
     private WasherRepository washerRepository;
 
-    public Washer getAvailableWasher(){
-        List<Washer> availableWasher = getWashers();
-        if(availableWasher.isEmpty()){
-            return null;
-
-        }
-        Random random = new Random();
-        return availableWasher.get(random.nextInt(availableWasher.size()));
+    public List<Washer> getAvailableWasher(){
+        return getWashers();
 
     }
 
