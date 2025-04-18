@@ -16,6 +16,13 @@ public class RabbitMQConfig {
     public static final String WASHER_STATUS_QUEUE = "washer.status.update.queue";
     public static final String WASHER_STATUS_EXCHANGE = "washer.status.update.exchange";
     public static final String WASHER_STATUS_ROUTING_KEY = "washer.status.update";
+    public static final String JOB_COMPLETION_EXCHANGE = "job.completion.exchange";
+    public static final String JOB_COMPLETION_ROUTING_KEY = "job.completion.update";
+
+    @Bean
+    public TopicExchange jobCompletionExchange() {
+        return new TopicExchange(JOB_COMPLETION_EXCHANGE);
+    }
 
     @Bean
     public Queue washerStatusQueue() {

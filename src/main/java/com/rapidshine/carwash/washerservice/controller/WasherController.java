@@ -4,6 +4,7 @@ import com.rapidshine.carwash.washerservice.model.Washer;
 import com.rapidshine.carwash.washerservice.service.WasherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,6 @@ public class WasherController {
 
     @GetMapping("/health")
     @PreAuthorize("hasRole('CUSTOMER')")
-
     public String health() {
         return "OK";
     }
@@ -28,11 +28,11 @@ public class WasherController {
         return washerService.getAvailableWasher();
     }
 
-    @PostMapping("/markDone")
+    @PostMapping("/done")
     @PreAuthorize("hasRole('WASHER')")
-    public String markWasherTaskAsDone(@RequestParam Long washerId) {
-//        return washerService.markTaskDone(washerId);
-        return null;
+    public String markWasherTaskAsDone(Authentication authentication) throws Exception {
+        return washerService.markTaskDone(authentication.getName());
+
     }
 
 }
