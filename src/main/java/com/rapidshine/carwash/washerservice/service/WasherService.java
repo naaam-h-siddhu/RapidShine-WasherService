@@ -1,6 +1,7 @@
 package com.rapidshine.carwash.washerservice.service;
 
 import com.rapidshine.carwash.washerservice.exceptions.UserNotFoundException;
+import com.rapidshine.carwash.washerservice.model.BookingStatus;
 import com.rapidshine.carwash.washerservice.model.Customer;
 import com.rapidshine.carwash.washerservice.model.User;
 import com.rapidshine.carwash.washerservice.model.Washer;
@@ -21,24 +22,19 @@ public class WasherService {
     @Autowired
     private WasherRepository washerRepository;
 
-    public Washer getAvailableWasher(){
-        List<Washer> availableWasher = getWashers();
-        if(availableWasher.isEmpty()){
-            return null;
-
-        }
-        Random random = new Random();
-        return availableWasher.get(random.nextInt(availableWasher.size()));
-
-    }
-
-    private List<Washer> getWashers() {
+    @Autowired
+    private BookingStatusPublisher bookingStatusPublisher;
+    public List<Washer> getAvailableWasher() {
         return washerRepository.findAll()
                 .stream()
                 .filter(Washer::isAvailable)
                 .collect(Collectors.toList());
 
     }
+
+
+
+
     // helper function to get the washer from jwt token
     private Washer getWasher(String email) throws  Exception{
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User with "+email+" not " +
@@ -50,5 +46,13 @@ public class WasherService {
 
 
 
+    }
+
+    public String markTaskDone(String email) throws Exception {
+        Washer washer = getWasher(email);
+        washer.setAvailable(true);
+        bookingStatusPublisher.updateWasherStatus(email, BookingStatus.COMPLETED);
+        washerRepository.save(washer);
+        return "Washer marked as done";
     }
 }

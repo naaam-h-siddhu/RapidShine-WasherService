@@ -3,6 +3,7 @@ package com.rapidshine.carwash.washerservice.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder(@Value("${jwt.secret}") String secret) {
@@ -35,7 +37,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/washer/available").hasRole("CUSTOMER")
+//                        .requestMatchers("/washer/available").hasRole("SERVICE")
+                        .requestMatchers("/washer/health").hasRole("CUSTOMER")
                         .requestMatchers("/washer/markDone").hasRole("WASHER")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
                         .anyRequest().authenticated()
