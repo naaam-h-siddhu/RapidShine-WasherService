@@ -37,5 +37,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage(),
                 LocalDateTime.now(),HttpStatus.INTERNAL_SERVER_ERROR    .value()));
     }
-
+    @ExceptionHandler(WasherBusyException.class)
+    public ResponseEntity<ErrorResponse> handleWasherBusyException(WasherBusyException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(
+                ex.getMessage(),
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value()
+        ));
+    }
 }

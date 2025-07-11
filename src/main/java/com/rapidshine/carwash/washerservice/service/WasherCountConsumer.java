@@ -8,18 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WasherStatusConsumer {
+public class WasherCountConsumer {
     @Autowired
     private WasherRepository washerRepository;
 
-    @RabbitListener(queues = "washer.status.update.queue")
-    public void handleWasherStatusUpdate(WasherStatusUpdateEvent event) {
-
-        System.out.println("Received washer status update: " + event.getEmail());
+    @RabbitListener(queues = "washer.count.update.queue")
+    public void handleWasherCountUpdate(WasherStatusUpdateEvent event) {
+        System.out.println("Received washer count update: " + event.getEmail());
         Washer washer = washerRepository.findByEmail(event.getEmail()).orElse(null) ;
         if (washer != null) {
-            System.out.println(event.isAvailable());
-            washer.setAvailable(event.isAvailable());
+//            washer.setAvailable(event.isAvailable());
+            washer.setTotal_services(washer.getTotal_services()+1);
             washerRepository.save(washer);
         }
         System.out.println("Washer update received in WasherService: " + event.getEmail());
