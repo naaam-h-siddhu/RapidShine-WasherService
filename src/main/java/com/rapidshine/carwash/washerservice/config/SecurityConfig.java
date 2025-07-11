@@ -37,8 +37,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/washer/available").hasRole("SERVICE")
-                        .requestMatchers("/washer/health").hasRole("CUSTOMER")
+                        .requestMatchers("/washer/available").hasRole("M2M")
+                        .requestMatchers("/washer/health").permitAll()
                         .requestMatchers("/washer/markDone").hasRole("WASHER")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
                         .anyRequest().authenticated()
